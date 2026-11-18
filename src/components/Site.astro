@@ -1,0 +1,202 @@
+---
+import { getSeoMeta } from 'emdash';
+import { ArrowDown, ArrowDownRight, ArrowLeft, ArrowRight, ArrowUpRight, Clock3, MapPin, Phone, Mail } from 'lucide-react';
+import Base from '../layouts/Base.astro';
+import Photo from './Photo.astro';
+import { launchPhoto } from '../utils/launch-media';
+import RestaurantCards from './RestaurantCards.astro';
+import { copy, directions, entries, entry, localized, media, offers, restaurantPath, type Entry, type Language } from '../utils/content';
+
+interface Props { path: string; lang: Language }
+const { path, lang } = Astro.props;
+const zh = lang === 'zh';
+const l = (path: string) => localized(path, lang);
+const c = (item: Entry | undefined, field: string) => copy(item, field, lang);
+const segments = path.split('/').filter(Boolean);
+const [route = 'home', slug] = segments;
+const cleanPath = segments.length ? '/' + segments.join('/') : '/';
+const pageRoute = ['home', 'about', 'restaurants', 'locations', 'news'].includes(route) && !slug && path !== 'home';
+const detailRoute = route === 'restaurants' && segments.length === 2;
+const newsRoute = route === 'news' && segments.length === 2;
+const [page, restaurant, news, restaurants, allOutlets, updates, homePage] = await Promise.all([
+  pageRoute ? entry('pages', route) : undefined,
+  detailRoute ? entry('restaurants', slug) : undefined,
+  newsRoute ? entry('news', slug) : undefined,
+  ['home', 'restaurants', 'locations'].includes(route) && !slug ? entries('restaurants') : [],
+  detailRoute || route === 'locations' ? entries('outlets') : [],
+  route === 'news' && !slug ? entries('news') : [],
+  route === 'about' && !slug ? entry('pages', 'home') : undefined,
+]);
+const isHome = route === 'home' && !!page;
+const item = page ?? restaurant ?? news;
+const missing = !item;
+if (missing) Astro.response.status = 404;
+const title = missing ? (zh ? '找不到页面' : 'Page not found')
+  : isHome ? (zh ? '云顶高原的港澳风味餐厅' : 'Hong Kong & Macau Restaurants in Genting Highlands')
+  : c(item, 'title');
+const description = c(item, 'lead') || c(item, 'summary');
+const image = media(item);
+const socialImage = image?.src ?? launchPhoto(item?.id)?.src;
+const seo = item && !zh ? getSeoMeta(item, {
+  siteUrl: Astro.url.origin, path: cleanPath, defaultTitle: title, defaultDescription: description,
+  defaultOgImage: socialImage,
+}) : undefined;
+const outletList = restaurant ? allOutlets.filter((outlet) => copy(outlet, 'restaurant') === restaurant.id) : allOutlets;
+const picks = restaurants.filter((r) => c(r, 'dish'));
+const publishedOffers = offers(updates);
+const expired = news && !offers([news]).length;
+const currentRestaurant = (outlet: Entry) => restaurants.find((r) => r.id === copy(outlet, 'restaurant'));
+const schema = isHome
+  ? { '@context': 'https://schema.org', '@type': 'Organization', name: 'DAFU 大福', url: new URL('/', Astro.url.origin).href, description }
+  : restaurant && outletList.length
+    ? { '@context': 'https://schema.org', '@graph': outletList.map((outlet) => ({
+      '@type': 'Restaurant', name: c(restaurant, 'title'), description,
+      address: { '@type': 'PostalAddress', streetAddress: c(outlet, 'address'), addressCountry: 'MY' },
+      url: new URL(l(cleanPath), Astro.url.origin).href,
+      ...(copy(outlet, 'destination') && { hasMap: directions(copy(outlet, 'destination')) }),
+      ...(copy(outlet, 'phone') && { telephone: copy(outlet, 'phone') }),
+    })) }
+    : undefined;
+---
+<Base {lang} path={cleanPath} title={seo?.title ?? title} description={seo?.description ?? description} image={seo?.ogImage ?? socialImage} canonical={seo?.canonical ?? undefined} robots={seo?.robots ?? undefined} {schema} {missing}>
+  {isHome ? (
+    <>
+      <section class="hero">
+        <div class="hero-visual photo-matte tone-0" aria-hidden="true">
+          <span class="hero-ornament">大福</span>
+          <Photo photo={image} launchSlug="home" eager class="hero-image" />
+        </div>
+        <div class="hero-gradient"></div>
+        <div class="shell hero-content">
+          <div class="eyebrow hero-kicker"><span></span>{c(page, 'eyebrow')}</div>
+          <h1>
+            <span class="hero-line"><span data-line>{c(page, 'title')}</span></span>
+            <span class="hero-line accent"><em data-line>{c(page, 'highlight')}</em></span>
+          </h1>
+          <p>{description}</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href={l('/restaurants')}>{c(page, 'action')}<ArrowUpRight size={18} aria-hidden="true" /></a>
+            <a class="button button-outline" href={l('/locations')}><MapPin size={17} aria-hidden="true" />{c(page, 'secondary')}</a>
+          </div>
+        </div>
+        <a class="hero-scroll" href="#restaurants" aria-label={zh ? '向下浏览餐厅' : 'Scroll to restaurants'}><ArrowDown size={20} /></a>
+      </section>
+      <div class="ribbon">
+        <div class="shell">
+          {[[zh ? '香港' : 'HONG KONG', '香港'], [zh ? '澳门' : 'MACAU', '澳門'], [zh ? '马来西亚' : 'MALAYSIA', '馬來西亞']].map(([en, cn]) => <span><span class="ribbon-diamond" aria-hidden="true">✦</span>{en}{!zh && <b lang="zh-Hant">{cn}</b>}</span>)}
+        </div>
+      </div>
+      <section class="paper restaurant-section" id="restaurants">
+        <div class="shell">
+          <div class="section-heading">
+            <div><p class="eyebrow"><span></span>{zh ? '大福餐厅' : 'OUR RESTAURANTS'}</p><h2>{c(page, 'section_title')}</h2></div>
+            <p>{c(page, 'section_lead')}</p>
+          </div>
+          <RestaurantCards {restaurants} {lang} />
+        </div>
+      </section>
+      {picks.length > 0 && <section class="signatures">
+        <div class="shell">
+          <div class="section-heading">
+            <div><p class="eyebrow"><span></span>{zh ? '招牌风味' : 'SIGNATURES'}</p><h2>{c(page, 'feature_title')}</h2></div>
+            <p>{c(page, 'feature_lead')}</p>
+          </div>
+          <div class="signature-grid">
+            {picks.map((pick, index) => (
+              <a class="signature-item" href={l(restaurantPath(pick.id)) + '#menu'}>
+                <div class:list={['signature-picture', 'photo-matte', 'tone-' + index % 3]} data-photo-reveal>
+                  <span class="photo-character" aria-hidden="true">{copy(pick, 'title', 'zh').slice(0, 1)}</span>
+                  <Photo photo={media(pick, 'featured_photo') ?? media(pick)} launchSlug={pick.id} />
+                </div>
+                <div><h3>{c(pick, 'dish')}</h3><ArrowUpRight size={22} aria-hidden="true" /></div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>}
+      <section class="visit-band"><div class="shell">
+        <div><p class="eyebrow"><span></span>{zh ? '云顶高原' : 'GENTING HIGHLANDS'}</p><h2>{zh ? '来大福坐坐。' : 'See you at DAFU.'}</h2></div>
+        <a class="button button-primary" href={l('/locations')}><MapPin size={17} aria-hidden="true" />{zh ? '查找门店' : 'Find a location'}<ArrowRight size={17} aria-hidden="true" /></a>
+      </div></section>
+    </>
+  ) : (
+    <>
+      <section class:list={['page-hero', restaurant && 'page-hero-detail']}>
+        <div class="shell page-hero-inner">
+          <div>
+            {(restaurant || news) && <a class="back-link" href={l(restaurant ? '/restaurants' : '/news')}><ArrowLeft size={16} />{restaurant ? (zh ? '所有餐厅' : 'All restaurants') : (zh ? '所有动态' : 'All updates')}</a>}
+            <p class="eyebrow"><span></span>{c(item, 'eyebrow') || 'DAFU 大福'}</p>
+            <h1>{missing ? title : c(item, 'title')}</h1>
+            {restaurant && <p class="detail-subtitle">{c(restaurant, 'subtitle')}</p>}
+            {description && <p class="page-lead">{description}</p>}
+            {restaurant && <div class="page-actions">
+              <a class="button button-primary" href="#menu">{zh ? '查看菜单' : 'View menu'}<ArrowDownRight size={17} /></a>
+              {outletList.length > 0 && <a class="button button-outline" href="#visit"><MapPin size={17} />{zh ? '到店指南' : 'Plan your visit'}</a>}
+            </div>}
+          </div>
+          {restaurant && <div class="detail-photo photo-matte tone-1">
+            <span class="photo-character" aria-hidden="true">{copy(restaurant, 'title', 'zh').slice(0, 1)}</span>
+            <Photo photo={image} launchSlug={restaurant.id} eager />
+          </div>}
+        </div>
+      </section>
+      <section class="paper subpage">
+        <div class="shell">
+          {missing && <a class="button button-primary" href={l('/')}>{zh ? '返回首页' : 'Return home'}<ArrowRight size={17} /></a>}
+          {page && route === 'restaurants' && <RestaurantCards {restaurants} {lang} />}
+          {page && route === 'about' && <div class="about-layout">
+            <div class="about-copy">{c(page, 'body').split(/\n\s*\n/).map((p) => <p>{p}</p>)}
+              <a class="button button-primary" href={l('/restaurants')}>{zh ? '探索餐厅' : 'Explore our restaurants'}<ArrowUpRight size={17} /></a>
+            </div>
+            <div class="detail-photo photo-matte tone-0"><span class="photo-character" aria-hidden="true">大福</span><Photo photo={image ?? media(homePage)} launchSlug="home" /></div>
+          </div>}
+          {restaurant && <div class="details-layout">
+            <div>
+              <p class="detail-description">{c(restaurant, 'body')}</p>
+              <section id="menu" class="menu-block">
+                <p class="eyebrow"><span></span>{zh ? '风味精选' : 'WHAT TO ORDER'}</p>
+                <h2>{zh ? '菜单精选' : 'Menu highlights'}</h2>
+                <ul>{c(restaurant, 'menu').split('\n').filter(Boolean).map((line) => <li>{line}</li>)}</ul>
+                {copy(restaurant, 'menu_url') && <a class="button button-primary" href={copy(restaurant, 'menu_url')}>{zh ? '完整菜单' : 'Full menu'}<ArrowUpRight size={17} /></a>}
+              </section>
+            </div>
+            <aside id="visit">
+              <h2>{zh ? '到店指南' : 'Plan your visit'}</h2>
+              {!outletList.length && <p>{zh ? '地址和营业时间将在此公布。' : 'Outlet address and opening hours will be announced here.'}</p>}
+              {outletList.length > 0 && <a class="inline-link" href={l('/locations')}>{zh ? '所有门店' : 'All locations'}<ArrowUpRight size={16} /></a>}
+            </aside>
+          </div>}
+          {(restaurant || route === 'locations') && outletList.length > 0 && <div class="outlet-grid">
+            {outletList.map((outlet) => {
+              const name = currentRestaurant(outlet);
+              return <article class="outlet">
+                {name && <a class="eyebrow inline-link" href={l(restaurantPath(name.id))}>{c(name, 'title')}<ArrowUpRight size={15} /></a>}
+                <h3>{c(outlet, 'title')}</h3>
+                <p><MapPin aria-hidden="true" size={19} />{c(outlet, 'address')}</p>
+                <p><Clock3 aria-hidden="true" size={19} />{c(outlet, 'hours')}</p>
+                {copy(outlet, 'phone') && <p><Phone size={19} /><a href={'tel:' + copy(outlet, 'phone').replace(/[^+\d]/g, '')}>{copy(outlet, 'phone')}</a></p>}
+                {copy(outlet, 'email') && <p><Mail size={19} /><a href={'mailto:' + copy(outlet, 'email')}>{copy(outlet, 'email')}</a></p>}
+                <div class="outlet-actions">
+                  {copy(outlet, 'destination') && <a class="button button-primary" href={directions(copy(outlet, 'destination'))}>{zh ? '获取路线' : 'Get directions'}<ArrowUpRight size={17} /></a>}
+                  {copy(outlet, 'source') && <a class="inline-link" href={copy(outlet, 'source')}>{zh ? '度假村资讯' : 'Resort information'}<ArrowUpRight size={15} /></a>}
+                </div>
+              </article>;
+            })}
+          </div>}
+          {page && route === 'news' && (publishedOffers.length ? <div class="outlet-grid">
+            {publishedOffers.map((update) => <article class="outlet news-card">
+              <p class="eyebrow">{c(update, 'eyebrow')}</p>
+              <h3>{c(update, 'title')}</h3>
+              <p>{c(update, 'lead')}</p>
+              <a class="inline-link" href={l('/news/' + update.id)}>{zh ? '了解更多' : 'Read more'}<ArrowUpRight size={17} /></a>
+            </article>)}
+          </div> : <p>{zh ? '目前没有最新优惠。' : 'Check back for the latest offers and announcements.'}</p>)}
+          {news && <article class="outlet news-card">
+            {expired ? <p>{zh ? '此优惠已结束。' : 'This offer has ended.'}</p> : copy(news, 'source') && <a class="button button-primary" href={copy(news, 'source')}>{c(news, 'action')}<ArrowUpRight size={17} /></a>}
+            {copy(news, 'restaurant') && <a class="inline-link" href={l(restaurantPath(copy(news, 'restaurant')))}>{zh ? '查看餐厅' : 'See the restaurant'}<ArrowUpRight size={17} /></a>}
+          </article>}
+        </div>
+      </section>
+    </>
+  )}
+</Base>

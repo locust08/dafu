@@ -1,0 +1,100 @@
+---
+import { getMenu } from 'emdash';
+import { EmDashHead, EmDashBodyEnd, EmDashBodyStart } from 'emdash/ui';
+import { createPublicPageContext } from 'emdash/page';
+import { ArrowUpRight, Globe2, MapPin } from 'lucide-react';
+import Brand from '../components/Brand.astro';
+import MobileNav from '../components/MobileNav';
+import { localized, type Language } from '../utils/content';
+import '../styles/site.css';
+interface Props {
+  lang: Language; path: string; title: string; description: string; image?: string;
+  schema?: Record<string, unknown>; missing?: boolean; canonical?: string; robots?: string;
+}
+const { lang, path, title, description, image, schema, missing, robots } = Astro.props;
+const zh = lang === 'zh';
+const l = (url: string) => localized(url, lang);
+const menu = await getMenu('primary');
+const baseLinks = menu?.items.length ? menu.items : [
+  { label: 'Our Story', url: '/about' }, { label: 'Restaurants', url: '/restaurants' },
+  { label: 'Promotions', url: '/news' }, { label: 'Locations', url: '/locations' },
+];
+const chinese: Record<string, string> = { '/about': '品牌故事', '/restaurants': '大福餐厅', '/news': '优惠动态', '/locations': '联系与门店' };
+const links = baseLinks.map(({ label, url }) => ({
+  label: zh ? chinese[url] ?? label : label,
+  href: url.startsWith('/') && !url.startsWith('//') ? l(url) : url,
+  current: path === url || path.startsWith(url + '/'),
+}));
+const languageLink = { label: zh ? 'English' : '简体中文', href: localized(path, zh ? 'en' : 'zh') };
+const locationText = zh ? '查找门店' : 'Find us';
+const fullTitle = title + ' | DAFU 大福';
+const canonical = Astro.props.canonical ?? new URL(l(path), Astro.url.origin).href;
+const page = createPublicPageContext({ Astro, kind: 'custom', pageType: 'website', title: fullTitle, description, canonical, image, siteName: 'DAFU 大福' });
+---
+<!doctype html>
+<html lang={zh ? 'zh-Hans' : 'en'}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#241714" />
+    <title>{fullTitle}</title>
+    <link rel="icon" href="/dafu.svg" type="image/svg+xml" />
+    <EmDashHead page={page} />
+    {(missing || robots) && <meta name="robots" content={missing ? 'noindex' : robots} />}
+    {!missing && <link rel="alternate" hreflang="en" href={new URL(path, Astro.url.origin).href} />}
+    {!missing && <link rel="alternate" hreflang="zh-Hans" href={new URL('/zh' + path, Astro.url.origin).href} />}
+    {!missing && <link rel="alternate" hreflang="x-default" href={new URL(path, Astro.url.origin).href} />}
+    {schema && <script type="application/ld+json" set:html={JSON.stringify(schema).replace(/</g, '\\u003c')} />}
+  </head>
+  <body>
+    <EmDashBodyStart page={page} />
+    <a class="skip" href="#main">{zh ? '跳到主要内容' : 'Skip to content'}</a>
+    <header class="site-header">
+      <div class="shell header-inner">
+        <Brand href={l('/')} />
+        <nav class="desktop-nav" aria-label={zh ? '主导航' : 'Primary'}>
+          {links.map((link) => <a href={link.href} aria-current={link.current ? 'page' : undefined}>{link.label}</a>)}
+        </nav>
+        <div class="header-actions">
+          <a class="language" href={languageLink.href} hreflang={zh ? 'en' : 'zh-Hans'} aria-label={languageLink.label}><Globe2 size={16} aria-hidden="true" />{zh ? 'EN' : '中文'}</a>
+          <a class="button button-primary header-visit" href={l('/locations')}><MapPin size={16} aria-hidden="true" />{locationText}</a>
+          <MobileNav client:load links={[...links, languageLink]} title={zh ? '菜单' : 'Menu'} close={zh ? '关闭菜单' : 'Close menu'} />
+        </div>
+      </div>
+    </header>
+    <main id="main" tabindex="-1"><slot /></main>
+    <footer class="footer">
+      <div class="shell">
+        <div class="footer-main">
+          <div><Brand href={l('/')} /><p>{zh ? '香港与澳门风味，马来西亚呈献。' : 'Hong Kong and Macau flavours, made in Malaysia.'}</p></div>
+          <nav aria-label={zh ? '页脚导航' : 'Footer'}>
+            {links.map((link) => <a href={link.href}>{link.label}</a>)}
+          </nav>
+          <a class="footer-location" href={l('/locations')}><MapPin size={18} />{zh ? '马来西亚云顶高原' : 'Genting Highlands, Malaysia'}<ArrowUpRight size={15} /></a>
+        </div>
+        <div class="footer-bottom"><span>© {new Date().getUTCFullYear()} DAFU 大福 · {zh ? '图片仅供参考' : 'Illustrative photography'}</span><a href={languageLink.href}>{languageLink.label}</a></div>
+      </div>
+    </footer>
+    <EmDashBodyEnd page={page} />
+  </body>
+</html>
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+  gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
+    const hero = document.querySelector('.hero');
+    if (hero) {
+      const timeline = gsap.timeline({ defaults: { ease: 'power4.out' } });
+      timeline.from('.hero [data-line]', { yPercent: 110, stagger: 0.12, duration: 0.9 }, 0);
+      timeline.from('.hero .hero-image', { scale: 1.06, duration: 1.6, ease: 'power2.out' }, 0);
+    }
+    gsap.utils.toArray<HTMLElement>('[data-photo-reveal]').forEach((element) => {
+      gsap.from(element, {
+        clipPath: 'inset(0 0 13% 0)', ease: 'none',
+        scrollTrigger: { trigger: element, start: 'top 98%', end: 'top 68%', scrub: 0.5 },
+      });
+    });
+  });
+</script>

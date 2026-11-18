@@ -1,0 +1,26 @@
+---
+import { ArrowUpRight, MapPin } from 'lucide-react';
+import Photo from './Photo.astro';
+import { copy, media, localized, restaurantPath, type Entry, type Language } from '../utils/content';
+interface Props { restaurants: Entry[]; lang: Language }
+const { restaurants, lang } = Astro.props;
+---
+<div class="restaurant-grid">
+  {restaurants.map((restaurant, index) => (
+    <article class="restaurant-card">
+      <a href={localized(restaurantPath(restaurant.id), lang)} class="restaurant-link">
+        <div class:list={['card-picture', 'photo-matte', 'tone-' + index % 3]} data-photo-reveal>
+          <span aria-hidden="true" class="photo-character">{copy(restaurant, 'title', 'zh').slice(0, 1)}</span>
+          <Photo photo={media(restaurant)} launchSlug={restaurant.id} />
+          <span class="card-category">{copy(restaurant, 'eyebrow', lang)}</span>
+        </div>
+        <div class="card-copy">
+          <span class="card-cn">{copy(restaurant, 'subtitle', lang)}</span>
+          <h3>{copy(restaurant, 'title', lang)}</h3>
+          <p>{copy(restaurant, 'summary', lang)}</p>
+          <div class="card-bottom"><span><MapPin size={15} aria-hidden="true" />{copy(restaurant, 'area', lang)}</span><span class="circle-arrow"><ArrowUpRight size={21} aria-hidden="true" /></span></div>
+        </div>
+      </a>
+    </article>
+  ))}
+</div>

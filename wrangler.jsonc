@@ -1,0 +1,37 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "test-dafu-restaurant-astro",
+	"workers_dev": true,
+	"preview_urls": false,
+	"upload_source_maps": false,
+	"main": "./src/worker.ts",
+	"compatibility_date": "2026-02-24",
+	"compatibility_flags": ["nodejs_compat"],
+	"kv_namespaces": [{ "binding": "SESSION", "id": "b667e59ff0fa4ea8943cb76a525737ae" }],
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "test-dafu-restaurant-astro",
+			"database_id": "afd89b45-f4be-47d3-ba28-196e153643e9",
+		},
+	],
+	"r2_buckets": [
+		{
+			"binding": "MEDIA",
+			"bucket_name": "test-dafu-restaurant-astro-media",
+		},
+	],
+	// Co-editing rooms, one Durable Object per entry being edited
+	"durable_objects": {
+		"bindings": [{ "name": "EMDASH_ROOMS", "class_name": "EmDashRoom" }],
+	},
+	"exports": {
+		"EmDashRoom": { "type": "durable-object", "storage": "sqlite" },
+	},
+	// Sandboxed plugins require Worker Loader, available on Workers paid plans. Uncomment to enable:
+	// "worker_loaders": [{ "binding": "LOADER" }],
+	// General maintenance cron trigger
+	"triggers": {
+		"crons": ["* * * * *"],
+	},
+}

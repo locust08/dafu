@@ -1,0 +1,10 @@
+---
+import { Image } from 'emdash/ui';
+import type { Media } from '../utils/content';
+import { launchPhoto } from '../utils/launch-media';
+interface Props { photo?: Media; launchSlug?: string; eager?: boolean; class?: string }
+const { photo, launchSlug, eager = false, class: className } = Astro.props;
+const launch = photo ? undefined : launchPhoto(launchSlug);
+---
+{photo && <Image image={photo} class={className} priority={eager} />}
+{launch && <img src={launch.src} alt={launch.alt} class={className} fetchpriority={eager ? 'high' : undefined} decoding="async" loading={eager ? 'eager' : 'lazy'} />}

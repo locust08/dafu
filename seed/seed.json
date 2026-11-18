@@ -1,0 +1,654 @@
+{
+  "$schema": "https://emdashcms.com/seed.schema.json",
+  "version": "1",
+  "meta": {
+    "name": "DAFU",
+    "description": "DAFU restaurant group",
+    "author": "DAFU"
+  },
+  "settings": {
+    "title": "DAFU 大福",
+    "tagline": "Hong Kong and Macau flavours in Genting Highlands"
+  },
+  "collections": [
+    {
+      "slug": "pages",
+      "label": "Site pages",
+      "labelSingular": "Site page",
+      "urlPattern": "/{slug}",
+      "supports": [
+        "drafts",
+        "revisions",
+        "preview",
+        "search",
+        "seo"
+      ],
+      "fields": [
+        {
+          "slug": "title",
+          "label": "Title",
+          "type": "string",
+          "required": true,
+          "searchable": true
+        },
+        {
+          "slug": "title_zh",
+          "label": "Title zh",
+          "type": "string"
+        },
+        {
+          "slug": "eyebrow",
+          "label": "Eyebrow",
+          "type": "string"
+        },
+        {
+          "slug": "eyebrow_zh",
+          "label": "Eyebrow zh",
+          "type": "string"
+        },
+        {
+          "slug": "lead",
+          "label": "Lead",
+          "type": "text"
+        },
+        {
+          "slug": "lead_zh",
+          "label": "Lead zh",
+          "type": "text"
+        },
+        {
+          "slug": "body",
+          "label": "Body",
+          "type": "text"
+        },
+        {
+          "slug": "body_zh",
+          "label": "Body zh",
+          "type": "text"
+        },
+        {
+          "slug": "highlight",
+          "label": "Highlight",
+          "type": "string"
+        },
+        {
+          "slug": "highlight_zh",
+          "label": "Highlight zh",
+          "type": "string"
+        },
+        {
+          "slug": "action",
+          "label": "Action",
+          "type": "string"
+        },
+        {
+          "slug": "action_zh",
+          "label": "Action zh",
+          "type": "string"
+        },
+        {
+          "slug": "secondary",
+          "label": "Secondary",
+          "type": "string"
+        },
+        {
+          "slug": "secondary_zh",
+          "label": "Secondary zh",
+          "type": "string"
+        },
+        {
+          "slug": "section_title",
+          "label": "Section title",
+          "type": "string"
+        },
+        {
+          "slug": "section_title_zh",
+          "label": "Section title zh",
+          "type": "string"
+        },
+        {
+          "slug": "section_lead",
+          "label": "Section lead",
+          "type": "text"
+        },
+        {
+          "slug": "section_lead_zh",
+          "label": "Section lead zh",
+          "type": "text"
+        },
+        {
+          "slug": "feature_title",
+          "label": "Feature title",
+          "type": "string"
+        },
+        {
+          "slug": "feature_title_zh",
+          "label": "Feature title zh",
+          "type": "string"
+        },
+        {
+          "slug": "feature_lead",
+          "label": "Feature lead",
+          "type": "text"
+        },
+        {
+          "slug": "feature_lead_zh",
+          "label": "Feature lead zh",
+          "type": "text"
+        },
+        {
+          "slug": "photo",
+          "label": "Photo",
+          "type": "image"
+        }
+      ]
+    },
+    {
+      "slug": "restaurants",
+      "label": "Restaurants",
+      "labelSingular": "Restaurant",
+      "urlPattern": "/restaurants/{slug}",
+      "supports": [
+        "drafts",
+        "revisions",
+        "preview",
+        "search",
+        "seo"
+      ],
+      "fields": [
+        {
+          "slug": "title",
+          "label": "Title",
+          "type": "string",
+          "required": true,
+          "searchable": true
+        },
+        {
+          "slug": "title_zh",
+          "label": "Title zh",
+          "type": "string"
+        },
+        {
+          "slug": "subtitle",
+          "label": "Subtitle",
+          "type": "string"
+        },
+        {
+          "slug": "subtitle_zh",
+          "label": "Subtitle zh",
+          "type": "string"
+        },
+        {
+          "slug": "eyebrow",
+          "label": "Eyebrow",
+          "type": "string"
+        },
+        {
+          "slug": "eyebrow_zh",
+          "label": "Eyebrow zh",
+          "type": "string"
+        },
+        {
+          "slug": "summary",
+          "label": "Summary",
+          "type": "text"
+        },
+        {
+          "slug": "summary_zh",
+          "label": "Summary zh",
+          "type": "text"
+        },
+        {
+          "slug": "body",
+          "label": "Body",
+          "type": "text"
+        },
+        {
+          "slug": "body_zh",
+          "label": "Body zh",
+          "type": "text"
+        },
+        {
+          "slug": "menu",
+          "label": "Menu",
+          "type": "text"
+        },
+        {
+          "slug": "menu_zh",
+          "label": "Menu zh",
+          "type": "text"
+        },
+        {
+          "slug": "dish",
+          "label": "Dish",
+          "type": "string"
+        },
+        {
+          "slug": "dish_zh",
+          "label": "Dish zh",
+          "type": "string"
+        },
+        {
+          "slug": "area",
+          "label": "Area",
+          "type": "string"
+        },
+        {
+          "slug": "area_zh",
+          "label": "Area zh",
+          "type": "string"
+        },
+        {
+          "slug": "position",
+          "label": "Position",
+          "type": "number"
+        },
+        {
+          "slug": "photo",
+          "label": "Photo",
+          "type": "image"
+        },
+        {
+          "slug": "featured_photo",
+          "label": "Featured photo",
+          "type": "image"
+        },
+        {
+          "slug": "menu_url",
+          "label": "Menu url",
+          "type": "url"
+        }
+      ]
+    },
+    {
+      "slug": "outlets",
+      "label": "Outlets",
+      "labelSingular": "Outlet",
+      "urlPattern": "/locations",
+      "supports": [
+        "drafts",
+        "revisions",
+        "preview",
+        "search",
+        "seo"
+      ],
+      "fields": [
+        {
+          "slug": "title",
+          "label": "Title",
+          "type": "string",
+          "required": true,
+          "searchable": true
+        },
+        {
+          "slug": "title_zh",
+          "label": "Title zh",
+          "type": "string"
+        },
+        {
+          "slug": "address",
+          "label": "Address",
+          "type": "string"
+        },
+        {
+          "slug": "address_zh",
+          "label": "Address zh",
+          "type": "string"
+        },
+        {
+          "slug": "hours",
+          "label": "Hours",
+          "type": "string"
+        },
+        {
+          "slug": "hours_zh",
+          "label": "Hours zh",
+          "type": "string"
+        },
+        {
+          "slug": "restaurant",
+          "label": "Restaurant",
+          "type": "string"
+        },
+        {
+          "slug": "destination",
+          "label": "Destination",
+          "type": "string"
+        },
+        {
+          "slug": "source",
+          "label": "Source",
+          "type": "url"
+        },
+        {
+          "slug": "phone",
+          "label": "Phone",
+          "type": "string"
+        },
+        {
+          "slug": "email",
+          "label": "Email",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "slug": "news",
+      "label": "Promotions & news",
+      "labelSingular": "News item",
+      "urlPattern": "/news/{slug}",
+      "supports": [
+        "drafts",
+        "revisions",
+        "preview",
+        "search",
+        "seo"
+      ],
+      "fields": [
+        {
+          "slug": "title",
+          "label": "Title",
+          "type": "string",
+          "required": true,
+          "searchable": true
+        },
+        {
+          "slug": "title_zh",
+          "label": "Title zh",
+          "type": "string"
+        },
+        {
+          "slug": "eyebrow",
+          "label": "Eyebrow",
+          "type": "string"
+        },
+        {
+          "slug": "eyebrow_zh",
+          "label": "Eyebrow zh",
+          "type": "string"
+        },
+        {
+          "slug": "lead",
+          "label": "Lead",
+          "type": "text"
+        },
+        {
+          "slug": "lead_zh",
+          "label": "Lead zh",
+          "type": "text"
+        },
+        {
+          "slug": "action",
+          "label": "Action",
+          "type": "string"
+        },
+        {
+          "slug": "action_zh",
+          "label": "Action zh",
+          "type": "string"
+        },
+        {
+          "slug": "source",
+          "label": "Source",
+          "type": "url"
+        },
+        {
+          "slug": "ends",
+          "label": "Ends",
+          "type": "string"
+        },
+        {
+          "slug": "restaurant",
+          "label": "Restaurant",
+          "type": "string"
+        },
+        {
+          "slug": "photo",
+          "label": "Photo",
+          "type": "image"
+        }
+      ]
+    }
+  ],
+  "menus": [
+    {
+      "name": "primary",
+      "label": "Primary Navigation",
+      "items": [
+        {
+          "type": "custom",
+          "label": "Our Story",
+          "url": "/about"
+        },
+        {
+          "type": "custom",
+          "label": "Restaurants",
+          "url": "/restaurants"
+        },
+        {
+          "type": "custom",
+          "label": "Promotions",
+          "url": "/news"
+        },
+        {
+          "type": "custom",
+          "label": "Locations",
+          "url": "/locations"
+        }
+      ]
+    }
+  ],
+  "content": {
+    "pages": [
+      {
+        "id": "home",
+        "slug": "home",
+        "status": "published",
+        "data": {
+          "title": "A little Hong Kong.",
+          "highlight": "A lot of heart.",
+          "eyebrow": "HONG KONG & MACAU · MADE IN MALAYSIA",
+          "lead": "From sizzling seafood to slow-cooked congee, discover the flavours of Hong Kong and Macau in Genting Highlands.",
+          "action": "Explore our restaurants",
+          "secondary": "Find a location",
+          "section_title": "Find your flavour.",
+          "section_lead": "Three dining experiences, each with its own take on the flavours and spirit of Hong Kong and Macau.",
+          "feature_title": "A taste of DAFU.",
+          "feature_lead": "From seafood to a warm bowl of congee, see what’s on the table.",
+          "title_zh": "香港风味。",
+          "highlight_zh": "满满人情味。",
+          "eyebrow_zh": "香港与澳门风味 · 马来西亚呈献",
+          "lead_zh": "从热腾腾的海鲜到慢熬生滚粥，在云顶高原品尝香港和澳门风味。",
+          "action_zh": "探索餐厅",
+          "secondary_zh": "查找门店",
+          "section_title_zh": "找到你的心头好。",
+          "section_lead_zh": "三种餐饮体验，各自呈现港澳的风味与生活气息。",
+          "feature_title_zh": "大福风味。",
+          "feature_lead_zh": "从鲜美海鲜到一碗热粥，看看大福餐桌上的风味。"
+        }
+      },
+      {
+        "id": "about",
+        "slug": "about",
+        "status": "published",
+        "data": {
+          "title": "Good food brings us together.",
+          "eyebrow": "OUR STORY",
+          "lead": "A Malaysian restaurant group with a love for the food and hospitality of Hong Kong and Macau.",
+          "body": "DAFU 大福 brings the bustle of a Hong Kong dai pai dong, the comfort of a Macau congee shop and the energy of Lan Kwai Fong to Malaysia.\n\nFrom a quick bowl on a cool Genting morning to a seafood feast with friends, we build our restaurants around the way people like to eat together.",
+          "title_zh": "好味道，让我们相聚。",
+          "eyebrow_zh": "品牌故事",
+          "lead_zh": "大福是一个马来西亚餐饮集团，热爱香港与澳门的美食和待客之道。",
+          "body_zh": "大福把香港大排档的热闹、澳门粥店的暖意与兰桂坊的夜生活带到马来西亚。\n\n无论是在清凉的云顶早晨吃一碗热粥，还是与好友分享一桌海鲜，我们都希望每一家大福餐厅都能成为相聚的好地方。"
+        }
+      },
+      {
+        "id": "restaurants",
+        "slug": "restaurants",
+        "status": "published",
+        "data": {
+          "title": "Find your flavour.",
+          "eyebrow": "OUR RESTAURANTS",
+          "lead": "Explore DAFU’s Hong Kong and Macau-inspired dining concepts, from Cantonese seafood to bowls of Macau-style congee.",
+          "title_zh": "找到你的心头好。",
+          "eyebrow_zh": "大福餐厅",
+          "lead_zh": "探索大福的港澳餐饮概念，从粤式海鲜到澳门风味生滚粥。"
+        }
+      },
+      {
+        "id": "news",
+        "slug": "news",
+        "status": "published",
+        "data": {
+          "title": "The latest from DAFU.",
+          "eyebrow": "PROMOTIONS & NEWS",
+          "lead": "Restaurant news, offers and updates from DAFU.",
+          "title_zh": "大福最新消息。",
+          "eyebrow_zh": "优惠与动态",
+          "lead_zh": "大福餐厅动态、优惠与最新消息。"
+        }
+      },
+      {
+        "id": "locations",
+        "slug": "locations",
+        "status": "published",
+        "data": {
+          "title": "Find us in Genting.",
+          "eyebrow": "CONTACT & LOCATIONS",
+          "lead": "Find outlet details, opening hours and directions for your visit to Genting Highlands.",
+          "title_zh": "在云顶找到大福。",
+          "eyebrow_zh": "联系与门店",
+          "lead_zh": "查找云顶高原的门店地址、营业时间和路线。"
+        }
+      }
+    ],
+    "restaurants": [
+      {
+        "id": "dafu-seafood",
+        "slug": "dafu-seafood",
+        "status": "published",
+        "data": {
+          "title": "DAFU Seafood",
+          "subtitle": "大福海鲜大排档",
+          "eyebrow": "HONG KONG DAI PAI DONG",
+          "summary": "Cantonese seafood, wok-fired favourites and big plates made for sharing.",
+          "body": "Gather around the table for Hong Kong dai pai dong-style seafood and Cantonese cooking. This Resorts World Genting outlet is in Highlands Hotel.",
+          "menu": "Live seafood • Ask the staff for the day’s selection\nCantonese wok dishes",
+          "dish": "Cantonese seafood",
+          "area": "Genting Highlands",
+          "title_zh": "大福海鲜大排档",
+          "subtitle_zh": "DAFU Seafood",
+          "eyebrow_zh": "港式大排档",
+          "summary_zh": "粤式海鲜、镬气小炒与适合分享的大盘菜。",
+          "body_zh": "围桌品尝港式大排档海鲜和粤菜。云顶世界分店位于高原酒店。",
+          "menu_zh": "生猛海鲜 · 当日供应请咨询店员\n粤式镬炒",
+          "dish_zh": "粤式海鲜",
+          "area_zh": "云顶高原",
+          "position": 1
+        }
+      },
+      {
+        "id": "dafu-congee",
+        "slug": "dafu-congee",
+        "status": "published",
+        "data": {
+          "title": "DAFU Congee",
+          "subtitle": "粥大福",
+          "eyebrow": "MACAU-STYLE CONGEE",
+          "summary": "Silky Macau-style congee, cooked to order and served piping hot.",
+          "body": "A warm bowl for the cool highlands. Inspired by Macau’s sang guan zok tradition, DAFU Congee cooks each bowl to order and serves it with classic sides at SkyAvenue.",
+          "menu": "Crab congee\nClam congee\nFrog congee\nDAFU pork bun",
+          "dish": "Macau-style crab congee",
+          "area": "Genting Highlands",
+          "title_zh": "粥大福",
+          "subtitle_zh": "DAFU Congee",
+          "eyebrow_zh": "澳门风味生滚粥",
+          "summary_zh": "现点现煮的澳门风味生滚粥，细滑暖胃。",
+          "body_zh": "给清凉云顶的一碗暖粥。粥大福延续澳门生滚粥传统，在云天大道现点现煮，并搭配经典小食。",
+          "menu_zh": "水蟹粥\n花蛤粥\n田鸡粥\n大福猪扒包",
+          "dish_zh": "澳门风味水蟹粥",
+          "area_zh": "云顶高原",
+          "position": 2
+        }
+      },
+      {
+        "id": "dafu-sing-bar",
+        "slug": "dafu-sing-bar",
+        "status": "published",
+        "data": {
+          "title": "DAFU Sing Bar",
+          "subtitle": "兰桂坊",
+          "eyebrow": "HONG KONG AFTER DARK",
+          "summary": "A nightlife concept inspired by the late nights of Lan Kwai Fong.",
+          "body": "DAFU Sing Bar takes its cue from Lan Kwai Fong, Hong Kong’s nightlife district. Check back for outlet details and the menu.",
+          "menu": "Menu details will be announced here.",
+          "dish": "",
+          "area": "Outlet details to come",
+          "title_zh": "兰桂坊",
+          "subtitle_zh": "DAFU Sing Bar",
+          "eyebrow_zh": "香港夜生活",
+          "summary_zh": "灵感来自香港兰桂坊夜生活的酒吧概念。",
+          "body_zh": "大福兰桂坊以香港著名夜生活街区为灵感打造。门店和菜单详情将陆续公布。",
+          "menu_zh": "菜单详情将在此公布。",
+          "dish_zh": "",
+          "area_zh": "门店详情待公布",
+          "position": 3
+        }
+      }
+    ],
+    "outlets": [
+      {
+        "id": "seafood-highlands-hotel",
+        "slug": "seafood-highlands-hotel",
+        "status": "published",
+        "data": {
+          "title": "Highlands Hotel",
+          "address": "Lot R/L1.3, Level 1, Highlands Hotel, Resorts World Genting, 69000 Genting Highlands, Pahang",
+          "hours": "Daily, 12 noon–2 am",
+          "title_zh": "高原酒店",
+          "address_zh": "云顶世界高原酒店一楼 R/L1.3，69000 云顶高原，彭亨",
+          "hours_zh": "每天中午 12 时至凌晨 2 时",
+          "restaurant": "dafu-seafood",
+          "destination": "Tai Fook Seafood Dai Pai Dong Highlands Hotel Genting Highlands",
+          "source": "https://www.rwgenting.com/en/genting-rewards/promotions/grc-x-tai-fook-seafood-dai-pai-dong.html"
+        }
+      },
+      {
+        "id": "congee-skyavenue",
+        "slug": "congee-skyavenue",
+        "status": "published",
+        "data": {
+          "title": "SkyAvenue",
+          "address": "Lot T2-19, Level 1, SkyAvenue, Resorts World Genting, 69000 Genting Highlands, Pahang",
+          "hours": "Open 24 hours daily",
+          "title_zh": "云天大道",
+          "address_zh": "云顶世界云天大道一楼 T2-19，69000 云顶高原，彭亨",
+          "hours_zh": "每天 24 小时营业",
+          "restaurant": "dafu-congee",
+          "destination": "DAFU Congee SkyAvenue Genting Highlands",
+          "source": "https://www.rwgenting.com/en/things-to-do/shopping/skyavenue-complex.html"
+        }
+      }
+    ],
+    "news": [
+      {
+        "id": "genting-rewards-seafood",
+        "slug": "genting-rewards-seafood",
+        "status": "published",
+        "data": {
+          "title": "Genting Rewards at DAFU Seafood",
+          "eyebrow": "MEMBER OFFER",
+          "lead": "Eligible Genting Rewards members can enjoy dining discounts at the Highlands Hotel outlet through 31 December 2026. See Resorts World Genting for current terms.",
+          "action": "View offer terms",
+          "title_zh": "大福海鲜大排档云尊会员优惠",
+          "eyebrow_zh": "会员优惠",
+          "lead_zh": "符合资格的云尊会员可于 2026 年 12 月 31 日前在高原酒店门店享用餐饮折扣。最新条款请参阅云顶世界。",
+          "action_zh": "查看优惠条款",
+          "source": "https://www.rwgenting.com/en/genting-rewards/promotions/grc-x-tai-fook-seafood-dai-pai-dong.html",
+          "ends": "2026-12-31",
+          "restaurant": "dafu-seafood"
+        }
+      }
+    ]
+  }
+}
